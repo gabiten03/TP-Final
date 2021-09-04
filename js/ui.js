@@ -67,6 +67,19 @@ $('#cambiarcoloresgrafico').click((e) => {
     cambiarcoloresgrafico();
 })
 
+$('#clearStorage').click((e) => {
+    reiniciar()
+});
+
+$('#btnId').click((e) => {
+    e.preventDefault();
+    recalcularPrecio();
+})
+
+$('#modoproveedor').click((e) => {
+    cambiarProveedor();
+})
+
 
 function cambiarCalculo() {
    

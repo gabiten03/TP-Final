@@ -94,6 +94,13 @@ body, p, li {
    font-family: 'Spinnaker', sans-serif;
    padding-top:30px;
  }
+
+ .errorDeJson{
+  text-transform: uppercase;
+  font-family: 'Spinnaker', sans-serif;
+  padding-top:30px;
+  color:green;
+}
  #textoTotalConsumo, #precioTotalConsumo{
   text-transform: uppercase;
   font-family: 'Spinnaker', sans-serif;

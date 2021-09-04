@@ -1,17 +1,9 @@
 var consumoTotaldeEquipos = 0;
 var precioTotal = 0;
-
-
-let tarifasFija = JSON.parse(tarifasEdenor);
-let equiposDatos = JSON.parse(equiposDatosJSON);
-let cantidadDeDiasDelMes = 31;
-let version = 0.6;
-
 const suma = "suma";
 const resta = "resta";
-
-verificarVersion();
-crearCodigoHtml();
+var cantidadDeDiasDelMes = 31;
+var version = 0.6;
 
 class Equipos {
     constructor() {
@@ -92,7 +84,7 @@ class Equipo {
         }
 
         precioTotal = consumoTotal * parseInt(tarifasFija[tarifaId].CostoKW) + parseInt(tarifasFija[tarifaId].TarifaCosto);
-        mostrarResultados(consumoTotal,precioTotal,tarifaId );
+        mostrarResultados(consumoTotal, precioTotal, tarifaId);
 
     }
     actualizarGraficos() {
@@ -109,25 +101,23 @@ class Equipo {
 }
 
 
-let equiposTodos = new Equipos();
+if ((verificarJSON(tarifasEdenor)) && (verificarJSON(equiposDatosJSON))) {
+    var tarifasFija = JSON.parse(tarifasEdenor);
+    var equiposDatos = JSON.parse(equiposDatosJSON);
+    verificarVersion();
+    crearCodigoHtml();
+    var equiposTodos = new Equipos();
+    generarEquipos();
+    equiposTodos.equipos[0].calcularPrecio(null);
+}else {
+    $('#equiposId').append (`<h2 class="errorDeJson" >Error en la carga de los archivos</h2>`);
+    $('#navbarSupportedContent').hide();
+    $('#cambiar').hide();
+    
+  
+}
 
-generarEquipos();
-equiposTodos.equipos[0].calcularPrecio(null);
 
-$('#clearStorage').click((e) => {
-    reiniciar()
-});
-
-
-$('#btnId').click((e) => {
-    e.preventDefault();
-    recalcularPrecio();
-
-})
-
-$('#modoproveedor').click((e) => {
-   cambiarProveedor ();
-})
 
 function mostrarResultados(consumoT, precioT, id) {
     let iva = 0.21;
@@ -142,7 +132,7 @@ function mostrarResultados(consumoT, precioT, id) {
 
 }
 
-function cambiarProveedor(){
+function cambiarProveedor() {
     let proveedor = localStorage.getItem('proveedor');
     if (proveedor == 'Edenor') {
         $('#labelproveedor').empty();
@@ -192,8 +182,6 @@ function recalcularPrecio() {
             $('.alert').fadeOut(2000).delay(2000);
             $('#textConsumo').val("");
         });
-
-
     } else {
         reiniciar();
         equiposTodos.equipos[0].calcularPrecio(parseFloat(valorConsumo));
@@ -225,12 +213,10 @@ function cambiarcoloresgrafico() {
     let colorRandom = generarColoresRandom();
     let p;
     let i = equiposTodos.equipos.length;
-
     for (p = 0; p < i; p++) {
         colorRandom = generarColoresRandom();
         chart1.data.datasets[0].backgroundColor[p] = colorRandom;
         colors2[p] = colorRandom;
-
     }
     chart1.update();
     chart2.update();
@@ -288,11 +274,9 @@ function generarEquipos() {
     else {
         generarEquiposDesdeJson();
     }
-
 }
 
 function generarEquiposDesdeLocalStorage() {
-
     let i = 0;
     let valorLocalStorage = 0;
     do {
@@ -321,8 +305,16 @@ function generarEquiposDesdeJson() {
         crearEquiposEnHtml(equiposDatos[p]);
         equiposTodos.equipos[p].SumarORestarHoras(equiposDatos[p].uso);
     }
-    
     localStorage.setItem("firstTime", "no");
     localStorage.setItem('proveedor', 'Edenor');
 }
 
+function verificarJSON(json) {
+    var chequearjson
+    try {
+        chequearjson = JSON.parse(json)
+    } catch (e) {
+        chequearjson = null;
+    }
+    return chequearjson
+}
